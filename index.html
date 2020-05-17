@@ -50,8 +50,17 @@ Hello.</canvas>
             bally = c.height / 2
         }
 
-        function moveEverything() {
+        function computerPaddleMove() {
+            var paddle2yCenter = padle2y + (PADLE_HEIGHT / 2);
+            if (paddle2yCenter < (bally - 35)) {
+                padle2y += 6;
+            } else if (paddle2yCenter > (bally + 35)) {
+                padle2y -= 6;
+            }
+        }
 
+        function moveEverything() {
+            computerPaddleMove();
             ballx = ballx + ballSpeedX;
             bally = bally + ballSpeedY;
             if (ballx < 0) {
