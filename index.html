@@ -10,32 +10,98 @@ Hello.</canvas>
         var c;
         var ctx;
         var ballx = 50;
+        var bally = 50;
+        var ballSpeedX = 10;
+        var ballSpeedY = 10;
+        var padle1y = 250;
+        var padle2y = 250;
+        const paddle_thickness = 10;
+        const PADLE_HEIGHT = 100;
+
+        function calMousePos(evt) {
+            var rect = c.getBoundingClientRect();
+            var root = document.documentElement;
+            var mouseX = evt.clientX - rect.left - root.scrollLeft;
+            var mouseY = evt.clientY - rect.top - root.scrollTop;
+            return {
+                x: mouseX,
+                y: mouseY
+            };
+        }
         window.onload = function() {
             c = document.getElementById("myCanvas");
             ctx = c.getContext("2d");
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, c.width, c.height);
             var framesPerSec = 30;
             setInterval(function() {
                 moveEverything(),
                     renderSquare()
             }, 1000 / framesPerSec);
 
+            c.addEventListener("mousemove", function(evt) {
+                var mousePos = calMousePos(evt);
+                padle1y = mousePos.y - (PADLE_HEIGHT / 2);
+            });
+
+        }
+
+        function ballReset() {
+            ballSpeedX = -ballSpeedX;
+            ballx = c.width / 2;
+            bally = c.height / 2
         }
 
         function moveEverything() {
-            ballx = ballx + 10;
+
+            ballx = ballx + ballSpeedX;
+            bally = bally + ballSpeedY;
+            if (ballx < 0) {
+                if (bally > padle1y &&
+                    bally < padle1y + PADLE_HEIGHT) {
+                    ballSpeedX = -ballSpeedX;
+
+                } else {
+                    ballReset();
+                }
+
+            }
+            if (ballx > c.width) {
+                if (bally > padle2y &&
+                    bally < padle2y + PADLE_HEIGHT) {
+                    ballSpeedX = -ballSpeedX;
+
+                } else {
+                    ballReset();
+                }
+            }
+            if (bally < 0) {
+                ballSpeedY = -ballSpeedY;
+            }
+            if (bally > c.height) {
+                ballSpeedY = -ballSpeedY;
+            }
         }
 
         function renderSquare() {
 
             console.log(ballx);
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, c.width, c.height);
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 210, 10, 100);
-            ctx.fillStyle = "red";
-            ctx.fillRect(ballx, 100, 10, 10);
+            //black screen backgound
+            canvasParam(0, 0, c.width, c.height, 'black');
+            //left paddle
+            canvasParam(0, padle1y, paddle_thickness, PADLE_HEIGHT, 'white');
+
+            //right paddle
+            canvasParam(c.width - paddle_thickness, padle2y, paddle_thickness, PADLE_HEIGHT, 'white');
+
+            //ball 
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(ballx, bally, 10, 0, Math.PI * 2, true);
+            ctx.fill();
+        }
+
+        function canvasParam(leftX, rightY, width, height, drawcolor) {
+            ctx.fillStyle = drawcolor;
+            ctx.fillRect(leftX, rightY, width, height);
         }
     </script>
 
