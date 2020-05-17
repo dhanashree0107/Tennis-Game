@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <canvas id="myCanvas" width="800" height="600" style="border:1px solid #d3d3d3;">
+Hello.</canvas>
+
+    <script>
+        var c;
+        var ctx;
+        var ballx = 50;
+        window.onload = function() {
+            c = document.getElementById("myCanvas");
+            ctx = c.getContext("2d");
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, c.width, c.height);
+            var framesPerSec = 30;
+            setInterval(function() {
+                moveEverything(),
+                    renderSquare()
+            }, 1000 / framesPerSec);
+
+        }
+
+        function moveEverything() {
+            ballx = ballx + 10;
+        }
+
+        function renderSquare() {
+
+            console.log(ballx);
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 210, 10, 100);
+            ctx.fillStyle = "red";
+            ctx.fillRect(ballx, 100, 10, 10);
+        }
+    </script>
+
+</body>
+
+</html>
